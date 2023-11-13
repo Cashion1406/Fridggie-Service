@@ -10,7 +10,6 @@ import {
 	HttpCode,
 	ClassSerializerInterceptor,
 	UseInterceptors,
-	SerializeOptions,
 } from '@nestjs/common'
 import { ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger'
 import {
@@ -83,6 +82,15 @@ export class ProductController {
 		}
 
 		return new ProductDTO(product)
+	}
+
+	@Get()
+	@ApiResponse({
+		status: 200,
+		type: ProductDTO,
+	})
+	async getAllProd(): Promise<ProductDTO[]> {
+		return this.productRepo.getAllProduct()
 	}
 
 	@Put('/:id')

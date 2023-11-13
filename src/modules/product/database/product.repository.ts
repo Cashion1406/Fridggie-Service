@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ProductEntity } from './entities/product.entity'
@@ -5,6 +6,7 @@ import { Repository } from 'typeorm'
 import { Product } from '../domain/product'
 import { ProductMapper } from './mappers/product.mapper'
 import { IQueryableProductRepository } from './interfaces'
+import { ProductDTO } from '../controllers/dtos/product.dtos'
 
 @Injectable()
 export class ProductRepository implements IQueryableProductRepository {
@@ -20,6 +22,11 @@ export class ProductRepository implements IQueryableProductRepository {
 				id,
 			},
 		})
+	}
+	async getAllProduct(): Promise<ProductDTO[]> {
+
+		const products = await this.productRepo.find() 
+		return products.map(products=>new ProductDTO(products))
 	}
 
 	async save(product: Product): Promise<Product> {
