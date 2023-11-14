@@ -6,6 +6,7 @@ import { DATABASE_CONFIG, validateConfig } from './config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import databaseConfig from './config/database.config'
 import { ProductModule } from './modules/product'
+import { WorkflowModule } from './modules/workflow/workflow.module'
 
 @Module({
 	imports: [
@@ -22,6 +23,8 @@ import { ProductModule } from './modules/product'
 		}),
 
 		ProductModule,
+
+		WorkflowModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
