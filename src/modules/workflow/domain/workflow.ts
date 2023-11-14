@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 
-import { StepEntity } from "src/modules/step/database/entities/step.entity"
 import { UpdateWorkflowRequestDTO } from "../controller/dtos/update-workflow.dts"
 import { CreateWorkflowRequestDTO } from "../controller/dtos/create-workflow.dtos"
 

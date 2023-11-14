@@ -89,7 +89,7 @@ export class WorkflowController {
 		return {workflow: existingWorkflow.serialize()}
 	}
 
-	@Delete('/:id')
+	@Delete('/workflow/:id')
 	@ApiResponse({
 		status: 200,
 		type: DeleteWorkflowResponseDTO,

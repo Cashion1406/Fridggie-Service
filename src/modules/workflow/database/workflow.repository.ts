@@ -21,7 +21,6 @@ export class WorkflowRepository implements IQueryableWorkflowRepository {
 			where:{
 				id
 			},
-			relations:['steps']
 		})
     }
 

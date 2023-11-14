@@ -1,7 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { create } from 'domain'
-import { StepEntity } from 'src/modules/step/database/entities/step.entity'
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity({ name: 'workflow' })
 
@@ -22,8 +20,8 @@ export class WorkflowEntity {
     @Column({name: 'workflow_desc',nullable:true})
     description: string
 
-    @OneToMany(()=> StepEntity,step =>step.workflow,{onDelete:'CASCADE'})
-    steps:StepEntity[]
+    // @OneToMany(()=> StepEntity,step =>step.workflow,{onDelete:'CASCADE'})
+    // steps:StepEntity[]
 
     @CreateDateColumn({name:'create_at',type:'timestamptz'})
 	createdAt: Date
