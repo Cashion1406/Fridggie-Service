@@ -6,6 +6,7 @@ import { DATABASE_CONFIG, validateConfig } from './config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import databaseConfig from './config/database.config'
 import { ProductModule } from './modules/product'
+import { IconModule } from './modules/icon/icon.module'
 import { WorkflowModule } from './modules/workflow/workflow.module'
 
 @Module({
@@ -21,7 +22,7 @@ import { WorkflowModule } from './modules/workflow/workflow.module'
 				configService.get(DATABASE_CONFIG),
 			inject: [ConfigService],
 		}),
-
+		IconModule,
 		ProductModule,
 
 		WorkflowModule,

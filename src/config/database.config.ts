@@ -5,7 +5,7 @@ export default () => ({
 	[DATABASE_CONFIG]: {
 		type: 'postgres',
 		url: process.env.DATABASE_CONNECTION_STRING,
-		autoLoadEntities: false,
+		autoLoadEntities: true,
 		entityPrefix: 'workflow_', // put your table's name prefix here,
 		logging: true,
 		synchronize: false,
