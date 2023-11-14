@@ -6,6 +6,7 @@ import { DATABASE_CONFIG, validateConfig } from './config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import databaseConfig from './config/database.config'
 import { ProductModule } from './modules/product'
+import { IconModule } from './modules/icon/icon.module'
 
 @Module({
 	imports: [
@@ -20,7 +21,7 @@ import { ProductModule } from './modules/product'
 				configService.get(DATABASE_CONFIG),
 			inject: [ConfigService],
 		}),
-
+		IconModule,
 		ProductModule,
 	],
 	controllers: [AppController],
