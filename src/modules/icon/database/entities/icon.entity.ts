@@ -5,6 +5,6 @@ export class IconEntity {
 	@PrimaryGeneratedColumn()
 	id: number
 
-	@Column()
-	NamePath: string
+	@Column({ name: 'icon_path' })
+	path: string
 }

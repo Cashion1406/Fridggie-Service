@@ -12,6 +12,8 @@ import { UpdateWorkflowRequestDTO, UpdateWorkflowResponseDTO } from './dtos/upda
 import { DeleteWorkflowResponseDTO } from './dtos/delete-workflow.dtos';
 import { SuccessResponseDTO } from '@libs';
 import { ResultCode } from 'src/libs/enums/result-code.enum';
+import { IconRepository } from 'src/modules/icon/database/icon.repository';
+
 
 
 
@@ -20,7 +22,9 @@ import { ResultCode } from 'src/libs/enums/result-code.enum';
 @UseInterceptors(ClassSerializerInterceptor)
 export class WorkflowController {
 
-	constructor(private readonly workflowRepo: WorkflowRepository) {}
+	constructor(
+		private readonly workflowRepo: WorkflowRepository,
+		private readonly iconRepo:IconRepository) {}
 
     @Get('/workflows')
 	@ApiResponse({
@@ -56,15 +60,16 @@ export class WorkflowController {
     async createWorkflow(@Body() workflowdto: CreateWorkflowRequestDTO
 	):Promise<CreateWorkflowResponseDTO>{
 
-        let workflow = Workflow.createNewFlow(workflowdto)
-		
-		workflow = await this.workflowRepo.save(workflow)
+		const icon = workflowdto.icon_id ? await this.iconRepo.getIcon(workflowdto.icon_id) : null;
+
+		const workflow = Workflow.createNewFlow(workflowdto, icon);
+
+		await this.workflowRepo.save(workflow);
 		return {
 				workflow: workflow.serialize(),
 		}
 			
 	}
-
 
 
 	@Patch('/workflow/:id')
@@ -83,7 +88,12 @@ export class WorkflowController {
 			 throw  new WorkflowNotFoundException()
 		}
 
-		existingWorkflow.update(dto)
+		const icon =  await this.iconRepo.getIcon(dto.icon_id)
+		//if user provide new icon_id, update with new icon, else ignore update icon
+		if(dto.icon_id) {
+			existingWorkflow.update(dto,icon)
+		}
+		
 		await this.workflowRepo.save(existingWorkflow)
 		
 		return {workflow: existingWorkflow.serialize()}

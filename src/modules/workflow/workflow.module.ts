@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WorkflowEntity } from './database/entities/workflow.entity';
 import { WorkflowRepository } from './database/workflow.repository';
 import { WorkflowMapper } from './database/mappers/workflow.mapper';
+import { IconRepository } from '../icon/database/icon.repository';
+import { IconEntity } from '../icon/database/entities/icon.entity';
 
 @Module({
-	imports:[TypeOrmModule.forFeature([WorkflowEntity])],
+	imports:[TypeOrmModule.forFeature([WorkflowEntity, IconEntity])],
 	controllers: [WorkflowController],
-	providers: [WorkflowRepository,WorkflowMapper],
+	providers: [WorkflowRepository,WorkflowMapper,IconRepository],
 
 })
 export class WorkflowModule {}

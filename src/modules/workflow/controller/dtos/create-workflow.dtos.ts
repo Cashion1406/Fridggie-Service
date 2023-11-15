@@ -18,6 +18,8 @@ export class CreateWorkflowRequestDTO {
 	@Length(0,200,{message:'Description exceeded character limit'})
 	description:string
 
+	@ApiProperty({required:false})
+	icon_id:number
 }
 
 export class CreateWorkflowResponseDTO extends PartialType(SuccessResponseDTO) {

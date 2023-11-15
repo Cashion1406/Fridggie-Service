@@ -21,12 +21,19 @@ export class WorkflowRepository implements IQueryableWorkflowRepository {
 			where:{
 				id
 			},
+			relations:['icon']
 		})
     }
 
 	  
     async getAllWorkflow(): Promise<WorkflowDto[]> {
-        const workflows= await this.workflowRepo.find()
+        const workflows= await this.workflowRepo.find({relations:['icon']})
+		// relations:['icon'],
+		// select:{
+		// 	icon:{
+		// 		path:true}
+		// 	}
+		// }
         return workflows.map(data=> new WorkflowDto(data))
     }
 
