@@ -12,6 +12,9 @@ export class UpdateWorkflowRequestDTO {
 	@ApiProperty()
 	@IsNotEmpty()
 	description: string
+
+	@ApiProperty({ required: false })
+	icon_id: number
 }
 
 export class UpdateWorkflowResponseDTO extends PartialType(SuccessResponseDTO) {
