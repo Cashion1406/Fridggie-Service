@@ -2,8 +2,8 @@
 
 import { UpdateWorkflowRequestDTO } from "../controller/dtos/update-workflow.dts"
 import { CreateWorkflowRequestDTO } from "../controller/dtos/create-workflow.dtos"
-import { IconDTO } from "src/modules/icon/controller/dtos/icon.dtos"
-import { IconEntity } from "src/modules/icon/database/entities/icon.entity"
+import { IconEntity } from "src/modules/icon/database"
+
 
 export interface WorkflowProps{
     id:number

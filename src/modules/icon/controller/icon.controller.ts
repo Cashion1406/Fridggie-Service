@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { ClassSerializerInterceptor, Controller, Get, HttpException, NotFoundException, Param, Res, UseInterceptors } from '@nestjs/common'
-import { IconRepository } from '../database/icon.repository'
 import axios, { AxiosError } from 'axios'
 import { Response } from 'express'
-import { Repository } from 'typeorm'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { IconDTO } from './dtos/icon.dtos'
 import { IconNotFoundException } from '../exceptions/icon.exception'
+import { IconRepository } from '../database'
 
 @Controller('icon')
 @ApiTags('Icon')

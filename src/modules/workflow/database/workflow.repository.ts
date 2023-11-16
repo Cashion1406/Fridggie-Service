@@ -6,7 +6,8 @@ import { Repository } from "typeorm";
 import { IQueryableWorkflowRepository } from "./workflow.interface";
 import { WorkflowDto } from "../controller/dtos/workflow.dtos";
 import { WorkflowMapper } from "./mappers/workflow.mapper";
-import { Workflow } from "../domain/workflow";
+import { Workflow } from "../domain";
+
 
 @Injectable()
 export class WorkflowRepository implements IQueryableWorkflowRepository {

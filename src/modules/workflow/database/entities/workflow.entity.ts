@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { IconEntity } from 'src/modules/icon/database/entities/icon.entity'
+import { IconEntity } from '../../../icon/database';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+
 
 @Entity({ name: 'workflow' })
 
@@ -23,7 +24,7 @@ export class WorkflowEntity {
 
     // @OneToMany(()=> StepEntity,step =>step.workflow,{onDelete:'CASCADE'})
     // steps:StepEntity[]
-    @ManyToOne(()=> IconEntity,{nullable:true})
+    @ManyToOne(()=> IconEntity ,{nullable:true})
     @JoinColumn({name:'icon_id'})
     icon:IconEntity
 
