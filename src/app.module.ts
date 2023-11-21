@@ -8,6 +8,8 @@ import databaseConfig from './config/database.config'
 import { ProductModule } from './modules/product'
 import { IconModule } from './modules/icon'
 import { WorkflowModule } from './modules/workflow'
+import { StepModule } from './modules/step/step.module'
+import { UserModule } from './modules/user/user.module'
 
 @Module({
 	imports: [
@@ -24,6 +26,8 @@ import { WorkflowModule } from './modules/workflow'
 		}),
 		IconModule,
 		ProductModule,
+		StepModule,
+		UserModule,
 
 		WorkflowModule,
 	],
