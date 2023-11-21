@@ -11,7 +11,7 @@ export class CreateWorkflowRequestDTO {
 	
 	@ApiProperty()
 	@IsNotEmpty({message:'Workflow name cannot be empty. Please fill in the context again!'})
-	@Length(5,20,{message:'Workflow name must be between 2 and 50 characters'})
+	@Length(0,20,{message:'Workflow name must be between 0 and 20 characters'})
 	name: string
 
 	@ApiProperty()

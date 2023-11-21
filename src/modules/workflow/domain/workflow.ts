@@ -46,8 +46,8 @@ export class Workflow {
 	static createNewFlow(dto:CreateWorkflowRequestDTO, icon?:IconEntity) {
 		return new Workflow({
 			id: null,
-			name :dto.name,
-			description :dto.description,
+			name :dto.name.trim(),
+			description :dto.description.trim(),
 			icon
 		})
 	}
