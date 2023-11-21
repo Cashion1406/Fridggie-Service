@@ -10,7 +10,8 @@ export class WorkflowMapper {
 
 			id: workflowEntity.id,
 			name: workflowEntity.name,
-			description:workflowEntity.description
+			description:workflowEntity.description,
+			icon:workflowEntity.icon
 		})
 
 	}
