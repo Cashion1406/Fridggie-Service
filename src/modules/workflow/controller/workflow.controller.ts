@@ -114,7 +114,7 @@ export class WorkflowController {
 	@Patch('/workflow/:id')
 	@ApiResponse({
 		status: 200,
-		type: WorkflowDto,
+		type: UpdateWorkflowResponseDTO,
 	})
 	async updateWorkflow(
 		@Param('id') id: number,

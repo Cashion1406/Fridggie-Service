@@ -21,7 +21,7 @@ export class WorkflowRepository implements IQueryableWorkflowRepository {
 			where: {
 				id,
 			},
-			relations: ['icon'],
+			relations: ['icon', 'steps', 'steps.owner'],
 		})
 	}
 
@@ -132,7 +132,9 @@ export class WorkflowRepository implements IQueryableWorkflowRepository {
 	}
 
 	async getFlowByName(name: string) {
-		const entity = await this.workflowRepo.findOne({ where: { name } })
+		const entity = await this.workflowRepo.findOne({
+			where: { name: ILike(name) },
+		})
 		return entity ? this.mapper.toDomain(entity) : null
 	}
 

@@ -3,7 +3,6 @@
 import { SuccessResponseDTO } from '@libs'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { IsNotEmpty, Length } from 'class-validator'
-import { ProductDTO } from 'src/modules/product/controllers/dtos/product.dtos'
 import { WorkflowDto } from './workflow.dtos'
 
 
@@ -18,7 +17,8 @@ export class CreateWorkflowRequestDTO {
 	@Length(0,200,{message:'Description exceeded character limit'})
 	description:string
 
-	@ApiProperty({required:false})
+	@ApiProperty()
+	@IsNotEmpty({message:'Please provide appropiate Icon'})
 	icon_id:number
 }
 
