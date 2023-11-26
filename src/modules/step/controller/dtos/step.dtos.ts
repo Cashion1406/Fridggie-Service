@@ -1,11 +1,6 @@
-/* eslint-disable prettier/prettier */
-
-
 import { ApiProperty } from '@nestjs/swagger'
-import { Exclude } from 'class-transformer'
-import { WorkflowDto } from 'src/modules/workflow/controller/dtos/workflow.dtos'
-import { StepEntity } from '../../database/entities/step.entity'
-
+import { Exclude, Transform, Type } from 'class-transformer'
+import { UserDTO } from 'src/modules/user/controller/dtos/user.dtos'
 
 export class StepDTO {
 	constructor(props: Partial<StepDTO>) {
@@ -18,15 +13,20 @@ export class StepDTO {
 	@ApiProperty()
 	name: string
 
-    @ApiProperty()
-    description: string
+	@ApiProperty()
+	description: string
 
-   
+	@ApiProperty()
+	// @Type(()=>UserDTO)
+	// @Transform(({value}) =>value.name)
+	owner: UserDTO
+
+	@ApiProperty()
+	order: number
+
 	@Exclude()
 	createdAt?: Date
 
 	@Exclude()
 	updatedAt?: Date
-
 }
-

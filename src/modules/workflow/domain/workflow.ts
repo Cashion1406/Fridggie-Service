@@ -3,6 +3,7 @@
 import { UpdateWorkflowRequestDTO } from "../controller/dtos/update-workflow.dts"
 import { CreateWorkflowRequestDTO } from "../controller/dtos/create-workflow.dtos"
 import { IconEntity } from "src/modules/icon/database"
+import { StepEntity } from "src/modules/step/database/entities/step.entity"
 
 
 export interface WorkflowProps{
@@ -17,7 +18,7 @@ export class Workflow {
 	private name: string
 	private description:string
 	private icon?:IconEntity
-
+	private steps?:StepEntity[]
 
     constructor(props: WorkflowProps) {
 		Object.assign(this, props)
@@ -39,15 +40,16 @@ export class Workflow {
 			id: this.id,
 			name: this.name,
 			description: this.description,
-			icon: this.icon
+			icon: this.icon,
+			steps:this.steps
 		}
 	}
 
 	static createNewFlow(dto:CreateWorkflowRequestDTO, icon?:IconEntity) {
 		return new Workflow({
 			id: null,
-			name :dto.name,
-			description :dto.description,
+			name :dto.name.trim(),
+			description :dto.description.trim(),
 			icon
 		})
 	}

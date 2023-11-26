@@ -1,84 +1,139 @@
-/* eslint-disable prettier/prettier */
-import { ClassSerializerInterceptor, Controller, UseInterceptors,Get,Param,Post, Body } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { StepRepository } from '../database/step.repository';
-import { StepDTO } from './dtos/step.dtos';
-import { WorkflowRepository } from 'src/modules/workflow/database/workflow.repository';
-import { WorkflowNotFoundException } from 'src/modules/workflow/exceptions/workflow.exceptions';
-import { StepNotFoundExceptions } from '../exception/step.exceptions';
-import { CreateStepRequestDTO, CreateStepResponseDTO } from './dtos/create-step.dtos';
-import { Step } from '../domain/step';
-import { UserRepository } from 'src/modules/user/database/user.repository';
-import { UserNotFoundException } from 'src/modules/user/exception/user.exceptions';
+import {
+	ClassSerializerInterceptor,
+	Controller,
+	UseInterceptors,
+	Get,
+	Param,
+	Post,
+	Body,
+	Patch,
+} from '@nestjs/common'
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { StepRepository } from '../database/step.repository'
+import { StepDTO } from './dtos/step.dtos'
+import { WorkflowRepository } from 'src/modules/workflow/database/workflow.repository'
+import { WorkflowNotFoundException } from 'src/modules/workflow/exceptions/workflow.exceptions'
+import {
+	StepExistsException,
+	StepNotFoundException,
+} from '../exception/step.exceptions'
+import {
+	CreateStepRequestDTO,
+	CreateStepResponseDTO,
+} from './dtos/create-step.dtos'
+import { Step } from '../domain/step'
+import { UserRepository } from 'src/modules/user/database/user.repository'
+import { UserNotFoundException } from 'src/modules/user/exception/user.exceptions'
+import {
+	UpdateStepRequestDTO,
+	UpdateStepResponseDTO,
+} from './dtos/update-step.dtos'
 
-@Controller('/step')
+@Controller()
 @ApiTags('Steps')
 @UseInterceptors(ClassSerializerInterceptor)
 export class StepController {
-    constructor(
-        private readonly stepRepo:StepRepository,
-        private readonly userRepo:UserRepository,
+	constructor(
+		private readonly stepRepo: StepRepository,
+		private readonly userRepo: UserRepository,
 		private readonly workflowRepo: WorkflowRepository,
+	) {}
 
-        ){}
-
-    @Get('/workflow/:id')
-    @ApiResponse({
+	@Get('/workflow/:id/step')
+	@ApiOperation({ summary: 'Get all steps belong to provided workflow' })
+	@ApiParam({
+		description: 'Enter workflow ID',
+		name: 'id',
+	})
+	@ApiResponse({
 		status: 200,
 		type: StepDTO,
 	})
-    async getStepsFromWorkflow(@Param('id') id:number):Promise<StepDTO[]>{
+	async getStepsByWorkflowId(@Param('id') id: number): Promise<StepDTO[]> {
+		const workflow = await this.stepRepo.getWorkFlow(id)
 
-        const workflow = await this.stepRepo.getWorkFlow(id)
+		if (!workflow) {
+			throw new WorkflowNotFoundException()
+		}
 
-        if(!workflow){
-            throw new WorkflowNotFoundException
-        }
+		return this.stepRepo.getAllStepFromWorkflow(id)
+	}
 
-        return this.stepRepo.getAllStepFromWorkflow(id)
-        
-    }
-
-
-    @Get('/:id')
-    @ApiResponse({
+	@Get('step/:id')
+	@ApiOperation({ summary: 'Get step details' })
+	@ApiResponse({
 		status: 200,
 		type: StepDTO,
 	})
-    async getStepById(@Param('id') id:number):Promise<StepDTO>{
-
-        const step =  await this.stepRepo.queryById(id)
+	async getStepById(@Param('id') id: number): Promise<StepDTO> {
+		const step = await this.stepRepo.queryById(id)
 
 		if (!step) {
-			throw new StepNotFoundExceptions
+			throw new StepNotFoundException()
 		}
 
 		return new StepDTO(step)
-        
-    }
+	}
 
-    
-
-    @Post('/workflow/:id')
-    @ApiResponse({
-		status: 200,
-		type: CreateStepRequestDTO,
+	@Post('/workflow/:id/step')
+	@ApiOperation({ summary: 'Create step based on workflow ID' })
+	@ApiResponse({
+		status: 201,
+		type: CreateStepResponseDTO,
 	})
-    async createSteps(@Param('id') id:number, @Body() dto:CreateStepRequestDTO):Promise<CreateStepResponseDTO>{
+	async createSteps(
+		@Param('id') id: number,
+		@Body() dto: CreateStepRequestDTO,
+	): Promise<CreateStepResponseDTO> {
+		const owner = await this.userRepo.getUserById(dto.owner_id)
+		if (!owner) throw new UserNotFoundException()
+		const workflow = await this.workflowRepo.queryById(id)
+		if (!workflow) throw new WorkflowNotFoundException()
+		const existStep = await this.stepRepo.getStepByName(dto.name)
+		if (existStep) throw new StepExistsException()
 
-        const owner = await this.userRepo.getUserById(dto.user_id) 
-        if (!owner) throw new UserNotFoundException
+		let step = Step.createNewStep(
+			dto.name,
+			dto.description,
+			owner,
+			workflow,
+		)
 
-        const workflow = await this.workflowRepo.queryById(id)
-        if (!workflow) throw new WorkflowNotFoundException
+		step = await this.stepRepo.save(step)
+		return {
+			step: step.serialize(),
+		}
+	}
 
-        
-        const step = Step.createNewStep(dto.name,dto.description,owner,workflow)
-        
-        await this.stepRepo.save(step)
-        return {
-           step: step.serialize() 
-        }
-        
-    }
+	@Patch('/step/:id')
+	@ApiOperation({ summary: 'Update Step with ID' })
+	@ApiParam({
+		description: 'Enter step ID',
+		name: 'id',
+	})
+	@ApiResponse({
+		status: 200,
+		type: UpdateStepResponseDTO,
+	})
+	async updateStep(
+		@Param('id') id: number,
+		@Body() dto: UpdateStepRequestDTO,
+	): Promise<UpdateStepResponseDTO> {
+		const existStep = await this.stepRepo.getStepById(id)
+		if (!existStep) throw new StepNotFoundException()
+
+		const { owner_id } = dto
+
+		if (owner_id) {
+			const new_owner = await this.userRepo.getUserById(owner_id)
+			existStep.update(dto, new_owner)
+		} else {
+			existStep.update(dto)
+		}
+
+		await this.stepRepo.save(existStep)
+		return {
+			step: existStep.serialize(),
+		}
+	}
 }

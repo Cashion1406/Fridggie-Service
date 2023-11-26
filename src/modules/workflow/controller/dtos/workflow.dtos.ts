@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 
 import { ApiProperty } from "@nestjs/swagger"
-import { Exclude } from "class-transformer"
+import { Exclude, Type } from "class-transformer"
 import { IconDTO } from "src/modules/icon/controller/dtos/icon.dtos"
+import { StepDTO } from "src/modules/step/controller/dtos/step.dtos"
 
 export class WorkflowDto {
     constructor(props: Partial<WorkflowDto>) {
@@ -17,6 +18,10 @@ export class WorkflowDto {
 
 	@ApiProperty()
 	icon:IconDTO
+
+	@ApiProperty()
+	@Type(()=>StepDTO)
+	steps:StepDTO[]
 
 	@Exclude()
 	createdAt?: Date
