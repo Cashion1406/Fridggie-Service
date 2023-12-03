@@ -23,7 +23,7 @@ export class StepEntity {
 	@PrimaryGeneratedColumn()
 	id: number
 
-	@Column({ name: 'step_name', unique: true })
+	@Column({ name: 'step_name' })
 	name: string
 
 	@Column({ name: 'step_description' })

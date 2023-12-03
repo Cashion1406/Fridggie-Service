@@ -11,10 +11,11 @@ import { WorkflowMapper } from '../workflow/database/mappers/workflow.mapper';
 import { StepMapper } from './database/mapper/step.mapper';
 import { UserRepository } from '../user/database/user.repository';
 import { UserEntity } from '../user/database/entities/user.entity';
+import { UserMapper } from '../user/database/mappers/user.mapper';
 
 @Module({
     imports:[TypeOrmModule.forFeature([StepEntity, WorkflowEntity, UserEntity])],
     controllers:[StepController],
-    providers:[StepRepository,WorkflowRepository,UserRepository, WorkflowMapper, StepMapper]
+    providers:[StepRepository,WorkflowRepository,UserRepository, WorkflowMapper, StepMapper,UserMapper]
 })
 export class StepModule {}

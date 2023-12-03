@@ -7,4 +7,10 @@ export class UserEntity {
 
 	@Column({ name: 'user_name' })
 	name: string
+
+	constructor(props: any) {
+		if (props) {
+			Object.assign(this, props)
+		}
+	}
 }
