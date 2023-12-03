@@ -7,13 +7,27 @@ import { WorkflowDto } from '../controller/dtos/workflow.dtos'
 import { WorkflowMapper } from './mappers/workflow.mapper'
 import { Workflow } from '../domain'
 import { FilterWorkflowDTO } from '../controller/dtos/filter-workflow.dtos'
+import { Step } from 'src/modules/step/domain/step'
+import { StepMapper } from 'src/modules/step/database/mapper/step.mapper'
+import { StepEntity } from 'src/modules/step/database/entities/step.entity'
+import { UserEntity } from 'src/modules/user/database/entities/user.entity'
+import { UserMapper } from 'src/modules/user/database/mappers/user.mapper'
 
 @Injectable()
 export class WorkflowRepository implements IQueryableWorkflowRepository {
 	constructor(
 		@InjectRepository(WorkflowEntity)
 		private readonly workflowRepo: Repository<WorkflowEntity>,
-		private readonly mapper: WorkflowMapper,
+
+		@InjectRepository(StepEntity)
+		private readonly stepRepo: Repository<StepEntity>,
+
+		@InjectRepository(UserEntity)
+		private readonly userRepo: Repository<UserEntity>,
+
+		private readonly workflowMapper: WorkflowMapper,
+		private readonly stepMapper: StepMapper,
+		private readonly userMapper: UserMapper,
 	) {}
 
 	queryById(id: number): Promise<WorkflowEntity> {
@@ -26,7 +40,9 @@ export class WorkflowRepository implements IQueryableWorkflowRepository {
 	}
 
 	async getAllWorkflow(): Promise<WorkflowDto[]> {
-		const workflows = await this.workflowRepo.find({ relations: ['icon'] })
+		const workflows = await this.workflowRepo.find({
+			relations: ['icon', 'steps', 'steps.owner'],
+		})
 		// relations:['icon'],
 		// select:{
 		// 	icon:{
@@ -128,21 +144,38 @@ export class WorkflowRepository implements IQueryableWorkflowRepository {
 			},
 		})
 
-		return entity ? this.mapper.toDomain(entity) : null
+		return entity ? this.workflowMapper.toDomain(entity) : null
 	}
 
 	async getFlowByName(name: string) {
 		const entity = await this.workflowRepo.findOne({
 			where: { name: ILike(name) },
 		})
-		return entity ? this.mapper.toDomain(entity) : null
+		return entity ? this.workflowMapper.toDomain(entity) : null
+	}
+
+	async getStepByName(name: string) {
+		return await this.stepRepo.findOne({ where: { name: ILike(name) } })
+	}
+
+	async getUserById(id: number): Promise<UserEntity> {
+		return await this.userRepo.findOneBy({ id })
 	}
 
 	async save(workflow: Workflow): Promise<Workflow> {
-		const entity = this.mapper.toOrm(workflow)
+		const entity = this.workflowMapper.toOrm(workflow)
 		const result = await this.workflowRepo.save(entity)
 
-		return this.mapper.toDomain(result)
+		return this.workflowMapper.toDomain(result)
+	}
+
+	async saveSteps(steps: Step[]): Promise<Step[]> {
+		const stepsEntity = steps.map((stepDTO) =>
+			this.stepMapper.toOrm(stepDTO),
+		)
+		const result = await this.stepRepo.save(stepsEntity)
+
+		return result.map((stepData) => this.stepMapper.toDomain(stepData))
 	}
 
 	async delete(id: number): Promise<boolean> {

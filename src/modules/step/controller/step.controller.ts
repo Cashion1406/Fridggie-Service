@@ -39,7 +39,7 @@ export class StepController {
 		private readonly workflowRepo: WorkflowRepository,
 	) {}
 
-	@Get('/workflow/:id/step')
+	@Get('/workflows/:id/steps')
 	@ApiOperation({ summary: 'Get all steps belong to provided workflow' })
 	@ApiParam({
 		description: 'Enter workflow ID',
@@ -59,7 +59,7 @@ export class StepController {
 		return this.stepRepo.getAllStepFromWorkflow(id)
 	}
 
-	@Get('step/:id')
+	@Get('steps/:id')
 	@ApiOperation({ summary: 'Get step details' })
 	@ApiResponse({
 		status: 200,
@@ -75,7 +75,7 @@ export class StepController {
 		return new StepDTO(step)
 	}
 
-	@Post('/workflow/:id/step')
+	@Post('/workflows/:id/steps')
 	@ApiOperation({ summary: 'Create step based on workflow ID' })
 	@ApiResponse({
 		status: 201,
@@ -92,12 +92,7 @@ export class StepController {
 		const existStep = await this.stepRepo.getStepByName(dto.name)
 		if (existStep) throw new StepExistsException()
 
-		let step = Step.createNewStep(
-			dto.name,
-			dto.description,
-			owner,
-			workflow,
-		)
+		let step = Step.createNewStep(dto.name, dto.description, owner, null)
 
 		step = await this.stepRepo.save(step)
 		return {

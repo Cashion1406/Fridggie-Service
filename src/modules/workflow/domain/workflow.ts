@@ -1,34 +1,28 @@
-/* eslint-disable prettier/prettier */
+import { UpdateWorkflowRequestDTO } from '../controller/dtos/update-workflow.dts'
+import { CreateWorkflowRequestDTO } from '../controller/dtos/create-workflow.dtos'
+import { IconEntity } from 'src/modules/icon/database'
+import { StepEntity } from 'src/modules/step/database/entities/step.entity'
 
-import { UpdateWorkflowRequestDTO } from "../controller/dtos/update-workflow.dts"
-import { CreateWorkflowRequestDTO } from "../controller/dtos/create-workflow.dtos"
-import { IconEntity } from "src/modules/icon/database"
-import { StepEntity } from "src/modules/step/database/entities/step.entity"
-
-
-export interface WorkflowProps{
-    id:number
-    name:string
-	description:string
-	icon?:IconEntity
+export interface WorkflowProps {
+	id: number
+	name: string
+	description: string
+	icon?: IconEntity
 }
 
 export class Workflow {
-    private id: number
+	private id: number
 	private name: string
-	private description:string
-	private icon?:IconEntity
-	private steps?:StepEntity[]
+	private description: string
+	private icon?: IconEntity
 
-    constructor(props: WorkflowProps) {
+	constructor(props: WorkflowProps) {
 		Object.assign(this, props)
 	}
 
-	update(dto: UpdateWorkflowRequestDTO,icon?:IconEntity) {
-		this.name = dto.name,
-		this.description=dto.description
-		this.icon=icon
-		
+	update(dto: UpdateWorkflowRequestDTO, icon?: IconEntity) {
+		;(this.name = dto.name), (this.description = dto.description)
+		this.icon = icon
 	}
 
 	/**
@@ -41,16 +35,15 @@ export class Workflow {
 			name: this.name,
 			description: this.description,
 			icon: this.icon,
-			steps:this.steps
 		}
 	}
 
-	static createNewFlow(dto:CreateWorkflowRequestDTO, icon?:IconEntity) {
+	static createNewFlow(dto: CreateWorkflowRequestDTO, icon?: IconEntity) {
 		return new Workflow({
 			id: null,
-			name :dto.name.trim(),
-			description :dto.description.trim(),
-			icon
+			name: dto.name.trim(),
+			description: dto.description.trim(),
+			icon,
 		})
 	}
 }
