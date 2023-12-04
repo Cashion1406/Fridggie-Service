@@ -75,36 +75,6 @@ export class StepController {
 		return new StepDTO(step)
 	}
 
-	@Post('/workflow/:id/step')
-	@ApiOperation({ summary: 'Create step based on workflow ID' })
-	@ApiResponse({
-		status: 201,
-		type: CreateStepResponseDTO,
-	})
-	async createSteps(
-		@Param('id') id: number,
-		@Body() dto: CreateStepRequestDTO,
-	): Promise<CreateStepResponseDTO> {
-		const owner = await this.userRepo.getUserById(dto.owner_id)
-		if (!owner) throw new UserNotFoundException()
-		const workflow = await this.workflowRepo.queryById(id)
-		if (!workflow) throw new WorkflowNotFoundException()
-		const existStep = await this.stepRepo.getStepByName(dto.name)
-		if (existStep) throw new StepExistsException()
-
-		let step = Step.createNewStep(
-			dto.name,
-			dto.description,
-			owner,
-			workflow,
-		)
-
-		step = await this.stepRepo.save(step)
-		return {
-			step: step.serialize(),
-		}
-	}
-
 	@Patch('/step/:id')
 	@ApiOperation({ summary: 'Update Step with ID' })
 	@ApiParam({
