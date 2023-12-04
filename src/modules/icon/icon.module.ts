@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-
-import { IconEntity } from './database/entities/icon.entity'
-import { IconRepository } from './database/icon.repository'
-import { IconController } from './controller/icon.controller'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
+import { IconController } from './controller'
+import { IconEntity, IconRepository } from './database'
 
 @Module({
 	imports: [

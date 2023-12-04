@@ -8,7 +8,9 @@ export class SuccessResponseInterceptor implements NestInterceptor {
 			map((data) => {
 				return {
 					resultCode: data.resultCode || ResultCode.Success, // fallback for result code
-					...data,
+					data: {
+						item: data,
+					},
 				}
 			}),
 		)

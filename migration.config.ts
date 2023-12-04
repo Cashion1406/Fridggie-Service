@@ -6,9 +6,9 @@ dotenv.config()
 export const postgresDataSource = new DataSource({
 	type: 'postgres',
 	url: process.env.DATABASE_CONNECTION_STRING,
-	entities: ['src/**/entities/*.ts'],
+	entities: [`${__dirname}/src/**/*.entity{.ts,.js}`],
+	migrations: [`${__dirname}/migrations/*{.ts,.js}`],
 	entityPrefix: 'workflow_', // put your table's name prefix here,
 	logging: true,
-	migrations: ['migrations/*.ts'],
 	migrationsTableName: 'workflow_migrations',
 })
