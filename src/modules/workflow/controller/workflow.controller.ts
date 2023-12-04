@@ -236,7 +236,7 @@ export class WorkflowController {
 		if (!deleteSuccess) {
 			throw new WorkflowNotFoundException()
 		}
-
+		let hello
 		return {
 			resultCode: ResultCode.Success,
 		}
