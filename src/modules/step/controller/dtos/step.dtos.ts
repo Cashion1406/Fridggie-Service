@@ -16,8 +16,8 @@ export class StepDTO {
 	@ApiProperty()
 	description: string
 
-	@ApiProperty()
-	// @Type(()=>UserDTO)
+	@ApiProperty({ type: () => UserDTO })
+	@Type(() => UserDTO)
 	// @Transform(({value}) =>value.name)
 	owner: UserDTO
 

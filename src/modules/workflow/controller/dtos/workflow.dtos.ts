@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Exclude, Type } from 'class-transformer'
-import { ValidateNested } from 'class-validator'
 import { IconDTO } from 'src/modules/icon/controller/dtos/icon.dtos'
 import { StepDTO } from 'src/modules/step/controller/dtos/step.dtos'
 
@@ -15,8 +14,13 @@ export class WorkflowDto {
 	@ApiProperty()
 	name: string
 
-	@ApiProperty()
+	@ApiProperty({ type: () => IconDTO })
+	@Type(() => IconDTO)
 	icon: IconDTO
+
+	@ApiProperty({ type: () => StepDTO })
+	@Type(() => StepDTO)
+	steps?: StepDTO[]
 
 	@Exclude()
 	createdAt?: Date
