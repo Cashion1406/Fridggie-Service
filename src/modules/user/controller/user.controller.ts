@@ -1,25 +1,29 @@
-/* eslint-disable prettier/prettier */
-import { ClassSerializerInterceptor, Controller, UseInterceptors,Get, Query } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserRepository } from '../database/user.repository';
-import { UserDTO } from './dtos/user.dtos';
+import {
+	ClassSerializerInterceptor,
+	Controller,
+	UseInterceptors,
+	Get,
+	Query,
+} from '@nestjs/common'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { UserRepository } from '../database/user.repository'
+import { UserDTO } from './dtos/user.dtos'
 
-@Controller('user')
+@Controller('users')
 @ApiTags('User')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
-    constructor(
-		private readonly userRepo: UserRepository,
-	) {}
+	constructor(private readonly userRepo: UserRepository) {}
 
-    @Get()
+	@Get()
+	@ApiOperation({
+		summary: 'Get all users',
+	})
 	@ApiResponse({
 		status: 200,
-		type: UserDTO,
+		type: [UserDTO],
 	})
-	async getAllFlow(@Query() name:string): Promise<UserDTO[]> {
-		return this.userRepo.getAllUser(name)
+	async getAllUser(): Promise<UserDTO[]> {
+		return this.userRepo.getAllUser()
 	}
-
-
 }

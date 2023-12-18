@@ -7,10 +7,12 @@ import {
 	JoinColumn,
 	ManyToMany,
 	ManyToOne,
+	OneToMany,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm'
+import { DocumentEntity } from './document.entity'
 
 @Entity({ name: 'step_tbl' })
 export class StepEntity {
@@ -29,14 +31,16 @@ export class StepEntity {
 	@Column({ name: 'step_description' })
 	description: string
 
-	@Column({ name: 'step_order', nullable: true })
-	order: number
-
 	@CreateDateColumn({ name: 'create_at', type: 'timestamptz' })
 	createdAt: Date
 
 	@UpdateDateColumn({ name: 'update_at', type: 'timestamptz' })
 	updatedAt: Date
+
+	@OneToMany(() => DocumentEntity, (document) => document.step, {
+		onDelete: 'CASCADE',
+	})
+	documents: DocumentEntity[]
 
 	@ManyToOne(() => UserEntity)
 	@JoinColumn({ name: 'user_id' })
