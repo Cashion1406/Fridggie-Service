@@ -1,9 +1,12 @@
-/* eslint-disable prettier/prettier */
-import { ClassSerializerInterceptor, Controller, Get, HttpException, NotFoundException, Param, Res, UseInterceptors } from '@nestjs/common'
+import {
+	ClassSerializerInterceptor,
+	Controller,
+	Get,
+	UseInterceptors,
+} from '@nestjs/common'
 import { IconRepository } from '../database/icon.repository'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { IconDTO } from './dtos/icon.dtos'
-
 
 @Controller('icons')
 @ApiTags('Icon')
@@ -16,12 +19,9 @@ export class IconController {
 		status: 200,
 		type: IconDTO,
 	})
-	async getAllIcon(){
+	async getAllIcon() {
 		const icon = await this.iconRepo.getListIcon()
-		
-		return icon.map(iconentity=> new IconDTO(iconentity))
-	}
-	}
 
-	
-
+		return icon.map((iconentity) => new IconDTO(iconentity))
+	}
+}

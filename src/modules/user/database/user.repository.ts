@@ -18,7 +18,7 @@ export class UserRepository {
 		return await this.userRepo.findOneBy({id})
 	}
 
-	async getAllUser(name:string):Promise<UserDTO[]>{
+	async getAllUser():Promise<UserDTO[]>{
 		const user = await this.userRepo.find()
 		return user.map(data=> new UserDTO(data))
 	}

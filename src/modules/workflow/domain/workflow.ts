@@ -1,19 +1,21 @@
+import { Step } from 'src/modules/step/domain/step'
 import { UpdateWorkflowRequestDTO } from '../controller/dtos/update-workflow.dts'
-import { CreateWorkflowRequestDTO } from '../controller/dtos/create-workflow.dtos'
 import { IconEntity } from 'src/modules/icon/database'
 
 export interface WorkflowProps {
 	id: number
 	name: string
 	description: string
-	icon?: IconEntity
+	icon: IconEntity
+	steps?: Step[]
 }
 
 export class Workflow {
 	private id: number
 	private name: string
 	private description: string
-	private icon?: IconEntity
+	private icon: IconEntity
+	private steps?: Step[]
 
 	constructor(props: WorkflowProps) {
 		Object.assign(this, props)
@@ -34,15 +36,22 @@ export class Workflow {
 			name: this.name,
 			description: this.description,
 			icon: this.icon,
+			steps: this.steps?.map((step) => step.serialize()),
 		}
 	}
 
-	static createNewFlow(dto: CreateWorkflowRequestDTO, icon?: IconEntity) {
+	static createNewFlow(
+		name: string,
+		description: string,
+		icon?: IconEntity,
+		steps?: Step[],
+	) {
 		return new Workflow({
 			id: null,
-			name: dto.name.trim(),
-			description: dto.description.trim(),
+			name: name,
+			description: description,
 			icon,
+			steps: steps,
 		})
 	}
 }

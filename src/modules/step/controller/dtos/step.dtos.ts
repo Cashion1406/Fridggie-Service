@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Exclude, Transform, Type } from 'class-transformer'
 import { UserDTO } from 'src/modules/user/controller/dtos/user.dtos'
+import { DocumentDTO } from './document.dtos'
 
 export class StepDTO {
 	constructor(props: Partial<StepDTO>) {
@@ -21,8 +22,9 @@ export class StepDTO {
 	// @Transform(({value}) =>value.name)
 	owner: UserDTO
 
-	@ApiProperty()
-	order: number
+	@ApiProperty({ type: () => DocumentDTO })
+	@Type(() => DocumentDTO)
+	documents?: DocumentDTO[]
 
 	@Exclude()
 	createdAt?: Date
