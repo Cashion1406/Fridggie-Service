@@ -8,6 +8,6 @@ export default () => ({
 		autoLoadEntities: true,
 		entityPrefix: 'workflow_', // put your table's name prefix here,
 		logging: true,
-		synchronize: false,
+		synchronize: true,
 	} as TypeOrmModuleOptions,
 })
